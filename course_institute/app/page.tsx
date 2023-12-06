@@ -1,3 +1,4 @@
+import CoursesList from "@/ui/cources/CourcesList";
 import { PrismaClient } from "@prisma/client";
 
 
@@ -14,6 +15,7 @@ export default async function Home() {
   return (
     <main className="">
       <h2>Welcome to NextJS</h2>
+      <CoursesList list={data.coursesInfo} />
       <pre>{JSON.stringify(data,null,2)}</pre>
     </main>
   )
