@@ -1,13 +1,13 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Input } from "@material-tailwind/react";
 
-function debounce(callback : () => void , delay : number = 500){
+function debounce(callback : (value : any) => void , delay : 500){
     let timer : any;
-    return () => {
+    return (value : any) => {
         clearTimeout(timer)
         setTimeout(() => {
-            callback()
+            callback(value)
         } , delay);
     }
 } 
@@ -24,11 +24,21 @@ export default function SearchBar({searchCallback} : any) {
         .then(res => res.json())
         .then(console.log)
     }
-    const searchCourses = debounce(getCourse , 500);
+    
+    const debounceAPI = useCallback( debounce((text : any ) => {
+        console.log(":: Debounce API ::" , text)
+    },500),[]   )
 
     useEffect(() => {
-        searchCourses();
-    },[searchText]);
+        // console.log(":: USE EFFECT ::searchText" , searchText);
+        // let timer = setTimeout(getCourse,500);
+        // return () => {
+        // console.log(":: USE EFFECT ::searchText In Return" , searchText);
+        // clearTimeout(timer)
+        // }
+        console.log(":: useEffect :: " , searchText);
+        debounceAPI(searchText);
+    },[searchText])
 
    
 
