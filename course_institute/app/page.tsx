@@ -15,7 +15,18 @@ export default async function Home() {
   const data = await getData();
   return (
     <main className="">
-      <SearchBar />
+      <SearchBar search={ async (payload : string) => {
+        'use server';
+       const prisma = new PrismaClient();
+        console.log('Server Acctions Execute',payload);
+        return await prisma.course.findMany({
+          where : {
+            title : {
+              contains : payload
+            }
+          }
+        })
+      } }/>
       <h2>Welcome to NextJS</h2>
       <CoursesList list={data.coursesInfo} />
       <pre>{JSON.stringify(data,null,2)}</pre>
