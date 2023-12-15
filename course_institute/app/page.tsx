@@ -1,5 +1,6 @@
 import SearchBar from "@/ui/components/SearchBar";
 import CoursesList from "@/ui/cources/CourcesList";
+import ExternalCourses from "@/ui/cources/ExternalCourses";
 import { PrismaClient } from "@prisma/client";
 
 
@@ -9,6 +10,13 @@ async function getData(){
   return {
     coursesInfo : courses
   }
+}
+
+const getExternalCourse = async () => {
+  'use server'
+   const externalAPI =  fetch('http://cms.fullstack.institute/rest/courses');
+   const response = (await externalAPI).json();
+      return response
 }
 
 export default async function Home() {
@@ -22,12 +30,13 @@ export default async function Home() {
         return await prisma.course.findMany({
           where : {
             title : {
-              contains : payload
+              contains : payload || ""
             }
           }
         })
       } }/>
       <h2>Welcome to NextJS</h2>
+      <ExternalCourses getData={getExternalCourse} />
       <CoursesList list={data.coursesInfo} />
       <pre>{JSON.stringify(data,null,2)}</pre>
     </main>
